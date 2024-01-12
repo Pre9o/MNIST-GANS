@@ -19,7 +19,6 @@ img_shape = (img_rows, img_cols, channels)
 z_dim = 100
 
 def build_generator(z_dim):
-
     model = Sequential()
 
     # Reshape input into 7x7x256 tensor via a fully connected layer
@@ -45,7 +44,6 @@ def build_generator(z_dim):
 
 
 def build_discriminator(img_shape):
-
     model = Sequential()
 
     # Convolutional layer, from 28x28x1 into 14x14x32 tensor
@@ -93,7 +91,6 @@ def build_discriminator(img_shape):
 
 
 def build_gan(generator, discriminator):
-
     model = Sequential()
 
     # Combined Generator -> Discriminator model
@@ -122,7 +119,6 @@ gan.compile(loss='binary_crossentropy', optimizer=Adam())
 
 
 def sample_images(generator, image_grid_rows=4, image_grid_columns=4):
-
     # Sample random noise
     z = np.random.normal(0, 1, (image_grid_rows * image_grid_columns, z_dim))
 
@@ -156,7 +152,6 @@ iteration_checkpoints = []
 
 
 def train(iterations, batch_size, sample_interval):
-
     # Load the MNIST dataset
     (X_train, _), (_, _) = mnist.load_data()
 
