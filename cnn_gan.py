@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 from keras.datasets import mnist
@@ -6,6 +7,14 @@ from keras.layers import LeakyReLU
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.utils import plot_model
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+images_dir = os.path.join(current_dir, 'images')
+
+if not os.path.exists(f"{images_dir}"):
+    os.makedirs(f"{images_dir}")
+        
 
 img_rows = 28
 img_cols = 28
@@ -82,7 +91,7 @@ discriminator.trainable = False
 gan = build_gan(generator, discriminator)
 gan.compile(loss='binary_crossentropy', optimizer=Adam())
 
-def sample_images(generator, image_grid_rows=4, image_grid_columns=4):
+def sample_images(generator, epoch, batch,image_grid_rows=4, image_grid_columns=4):
     # Sample random noise
     z = np.random.normal(0, 1, (image_grid_rows * image_grid_columns, z_dim))
 
@@ -107,8 +116,8 @@ def sample_images(generator, image_grid_rows=4, image_grid_columns=4):
             axs[i, j].axis('off')
             cnt += 1
 
-    plt.show()
-
+    # plt.show()
+    plt.savefig(f"{images_dir}/generated_images_{epoch}.png")
 
 losses = []
 accuracies = []
@@ -161,7 +170,7 @@ def train(iterations, batch_size, sample_interval):
 
         if (iteration + 1) % sample_interval == 0:
             # Output a sample of generated image
-            sample_images(generator)
+            sample_images(generator, iteration, iteration + 1)
 
             # Save losses and accuracies so they can be plotted after training
             losses.append((d_loss, g_loss))
